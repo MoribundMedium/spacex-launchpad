@@ -1,7 +1,7 @@
 import {inject} from '@loopback/context';
-import {get, param} from '@loopback/rest';
+import {get, param, HttpErrors} from '@loopback/rest';
 import {SpacexLaunchpadApi} from '../services/spacex-launchpad-api.service';
-import {LaunchpadInfo} from '../models';
+import {LaunchpadInfo, LaunchpadInfoDto} from '../models';
 
 export class LaunchpadInfoController {
   constructor(
@@ -10,8 +10,22 @@ export class LaunchpadInfoController {
   ) {}
 
   @get('')
-  async getLaunchpadInfo(): Promise<LaunchpadInfo> {
+  async getLaunchpadInfo(): Promise<void | LaunchpadInfoDto[]> {
     // TODO add parameters like: @param.path.integer('intA') intA: number
-    return await this.spacexLaunchpadApi.get();
+    return await this.spacexLaunchpadApi
+      .get()
+      .then(results => mapLaunchpadInfoToDto(results))
+      .catch(results => errorHandler(results));
   }
+}
+
+function errorHandler(err: Error) {
+  // TODO implement more error handling
+  throw new HttpErrors[503]();
+}
+
+function mapLaunchpadInfoToDto(launchpadInfoFromApi: void | LaunchpadInfo[]) {
+  return launchpadInfoFromApi
+    ? launchpadInfoFromApi.map(val => LaunchpadInfoDto.newInstanceFromApi(val))
+    : [];
 }

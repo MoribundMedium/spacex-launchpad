@@ -8,7 +8,7 @@
     {
       "template": {
         "method": "GET",
-        "url": "https://api.spacexdata.com/v2/launchpads"
+        "url": "https://api.spacexdata.com/v2/notlaunchpads"
       },
       "functions": {
         "get": []

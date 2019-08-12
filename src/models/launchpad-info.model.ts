@@ -11,7 +11,7 @@ export class LaunchpadInfo extends Model {
   @property({
     type: 'string',
   })
-  fullName?: string;
+  full_name?: string;
 
   @property({
     type: 'string',
