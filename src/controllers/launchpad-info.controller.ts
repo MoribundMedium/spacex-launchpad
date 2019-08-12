@@ -2,6 +2,7 @@ import {inject} from '@loopback/context';
 import {get, param, HttpErrors} from '@loopback/rest';
 import {SpacexLaunchpadApi} from '../services/spacex-launchpad-api.service';
 import {LaunchpadInfo, LaunchpadInfoDto} from '../models';
+const logger = require('../logger');
 
 export class LaunchpadInfoController {
   constructor(
@@ -21,7 +22,8 @@ export class LaunchpadInfoController {
 
 function errorHandler(err: Error) {
   // TODO implement more error handling
-  throw new HttpErrors[503]();
+  logger.error('uh oh!!!');
+  throw new HttpErrors[503](); // "unhandled error, make sure it back to user?"
 }
 
 function mapLaunchpadInfoToDto(launchpadInfoFromApi: void | LaunchpadInfo[]) {
