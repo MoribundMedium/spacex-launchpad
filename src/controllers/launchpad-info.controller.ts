@@ -1,5 +1,5 @@
 import {inject} from '@loopback/context';
-import {get, param, HttpErrors} from '@loopback/rest';
+import {get, HttpErrors, param} from '@loopback/rest';
 import {SpacexLaunchpadApi} from '../services/spacex-launchpad-api.service';
 import {LaunchpadInfo, LaunchpadInfoDto} from '../models';
 const logger = require('../logger');
@@ -11,19 +11,35 @@ export class LaunchpadInfoController {
   ) {}
 
   @get('')
-  async getLaunchpadInfo(): Promise<void | LaunchpadInfoDto[]> {
-    // TODO add parameters like: @param.path.integer('intA') intA: number
-    return await this.spacexLaunchpadApi
+  async getLaunchpadInfo(
+    @param.query.string('searchTerm') searchTerm: string,
+  ): Promise<void | LaunchpadInfoDto[]> {
+    return this.spacexLaunchpadApi
       .get()
-      .then(results => mapLaunchpadInfoToDto(results))
+      .then(results =>
+        mapLaunchpadInfoToDto(results).filter(
+          filterLaunchpadsByTerm(searchTerm),
+        ),
+      )
       .catch(results => errorHandler(results));
   }
+}
+
+function filterLaunchpadsByTerm(searchTerm: string) {
+  return function(launchpad: LaunchpadInfoDto) {
+    return (
+      (launchpad.name &&
+        launchpad.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (launchpad.status &&
+        launchpad.status.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+  };
 }
 
 function errorHandler(err: Error) {
   // TODO implement more error handling
   logger.error('uh oh!!!');
-  throw new HttpErrors[503](); // "unhandled error, make sure it back to user?"
+  throw new HttpErrors[503](); // unhandled error, make sure it returns back to user?
 }
 
 function mapLaunchpadInfoToDto(launchpadInfoFromApi: void | LaunchpadInfo[]) {

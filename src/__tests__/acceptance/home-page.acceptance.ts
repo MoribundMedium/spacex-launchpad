@@ -18,7 +18,7 @@ describe('HomePage', () => {
     await client
       .get('/')
       .expect(200)
-      .expect('Content-Type', /text\/html/);
+      .expect('Content-Type', 'application/json');
   });
 
   it('exposes self-hosted explorer', async () => {
