@@ -23,8 +23,6 @@ export class LaunchpadInfo extends Model {
   }
 }
 
-export interface LaunchpadInfoRelations {
-  // describe navigational properties here
-}
+export interface LaunchpadInfoRelations {}
 
 export type LaunchpadInfoWithRelations = LaunchpadInfo & LaunchpadInfoRelations;

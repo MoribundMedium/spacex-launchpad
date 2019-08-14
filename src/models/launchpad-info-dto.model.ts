@@ -19,7 +19,7 @@ export class LaunchpadInfoDto extends Model {
   })
   status?: string;
 
-  // Constructs new DTO from datasource model
+  // Constructs new DTO model from datasource model
   static newInstanceFromApi(launchpadInfo: LaunchpadInfo) {
     return new this({
       id: launchpadInfo.id,
@@ -33,9 +33,7 @@ export class LaunchpadInfoDto extends Model {
   }
 }
 
-export interface LaunchpadInfoDtoRelations {
-  // describe navigational properties here
-}
+export interface LaunchpadInfoDtoRelations {}
 
 export type LaunchpadInfoDtoWithRelations = LaunchpadInfoDto &
   LaunchpadInfoDtoRelations;

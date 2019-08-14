@@ -14,6 +14,10 @@ export class LaunchpadInfoController {
   async getLaunchpadInfo(
     @param.query.string('searchTerm') searchTerm: string,
   ): Promise<void | LaunchpadInfoDto[]> {
+    logger.info({
+      methodName: 'getLaunchpadInfo',
+      queryParams: searchTerm,
+    });
     return this.spacexLaunchpadApi
       .get()
       .then(results =>
@@ -21,7 +25,7 @@ export class LaunchpadInfoController {
           filterLaunchpadsByTerm(searchTerm),
         ),
       )
-      .catch(results => errorHandler(results));
+      .catch(results => errorHandler(results, 'getLaunchpadInfo'));
   }
 }
 
@@ -36,9 +40,12 @@ function filterLaunchpadsByTerm(searchTerm: string) {
   };
 }
 
-function errorHandler(err: Error) {
-  // TODO implement more error handling
-  logger.error('uh oh!!!');
+// TODO: methodName can be omitted if we log the full call stack
+function errorHandler(err: Error, methodName: string) {
+  logger.error({
+    error: err,
+    methodName: methodName,
+  });
   throw new HttpErrors[503](); // unhandled error, make sure it returns back to user?
 }
 
