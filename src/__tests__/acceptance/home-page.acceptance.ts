@@ -14,13 +14,6 @@ describe('HomePage', () => {
     await app.stop();
   });
 
-  it('exposes a default home page', async () => {
-    await client
-      .get('/')
-      .expect(200)
-      .expect('Content-Type', 'application/json');
-  });
-
   it('exposes self-hosted explorer', async () => {
     await client
       .get('/explorer/')

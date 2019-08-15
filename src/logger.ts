@@ -8,7 +8,7 @@ const logger = winston.createLogger({
     }),
     winston.format.json(),
   ),
-  defaultMeta: {service: 'launchpad-api'}, // TODO rename
+  defaultMeta: {service: 'launchpad-api'},
   transports: [
     // - Write to all logs with level `info` and below to `combined.log`
     // - Write all logs error (and below) to `error.log`.
